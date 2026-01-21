@@ -5,7 +5,7 @@ import logging
 
 
 sys.path.append(os.getcwd())
-logger = logging.getLogger("ModelConfigs")
+logger = logging.getLogger("Model_Configurations")
 
 @staticmethod
 class ModelConfigs:
