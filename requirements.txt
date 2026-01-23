@@ -11,7 +11,7 @@ frontend
 langchain-text-splitters
 dashscope
 ragas
-
+beautifulsoup4
 # PaddleOCR-VL 客户端依赖包
 # 用于连接云端 vLLM 服务进行 OCR 识别
 

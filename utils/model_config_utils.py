@@ -23,7 +23,8 @@ class ModelConfigs:
         self._get_deepseek_model_config()
         self._get_glm_model_config()
         self._get_moonshot_model_config()
-
+        self._get_local_model_config()
+        
     def _load_model_config(self):
         if not os.path.exists(os.path.abspath(self.config_path)):
             raise FileNotFoundError(f"Model config file not found: {self.config_path}")
