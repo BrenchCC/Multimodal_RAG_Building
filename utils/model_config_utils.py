@@ -24,6 +24,8 @@ class ModelConfigs:
         self._get_glm_model_config()
         self._get_moonshot_model_config()
         self._get_local_model_config()
+        self._get_tavily_api_config()
+        self._get_langsmith_api_config()
         
     def _load_model_config(self):
         if not os.path.exists(os.path.abspath(self.config_path)):
@@ -107,6 +109,20 @@ class ModelConfigs:
         self.LOCAL_BASE_URL = local_base_url
         self.LOCAL_API_KEY = local_api_key
         return local_base_url, local_api_key
+
+    def _get_tavily_api_config(self):
+        tavily_model_config = self._config.get('Tavily', {})
+        tavily_api_key = tavily_model_config.get('api_key', '')
+
+        self.TAVILY_API_KEY = tavily_api_key
+        return tavily_api_key
+
+    def _get_langsmith_api_config(self):
+        langsmith_model_config = self._config.get('LangSmith', {})
+        langsmith_api_key = langsmith_model_config.get('api_key', '')
+
+        self.LANGSMITH_API_KEY = langsmith_api_key
+        return langsmith_api_key
     
 MODEL_CONFIGS = ModelConfigs()
 

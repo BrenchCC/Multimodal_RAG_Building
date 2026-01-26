@@ -1,4 +1,5 @@
 langchain
+langchain-milvus
 langchain-openai
 langchain-experimental
 pymilvus==2.6.0
