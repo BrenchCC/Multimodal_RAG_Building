@@ -13,14 +13,17 @@ import requests
 import dashscope
 
 sys.path.append(os.getcwd())
-from utils.model_config_utils import MODEL_CONFIGS
+from utils.env_model_util import (
+    DASHSCOPE_API_KEY,
+    EMBEDDING_MODEL_NAME
+)
 
 logger = logging.getLogger("Embeddings_Tool")
 
 
 # ========= 配置区 =========
-DASHSCOPE_MODEL = "multimodal-embedding-v1"  # 指定使用的达摩院多模态嵌入模型名称
-DASHSCOPE_API_KEY = MODEL_CONFIGS.DASHSCOPE_API_KEY
+DASHSCOPE_MODEL = EMBEDDING_MODEL_NAME  # 指定使用的达摩院多模态嵌入模型名称
+DASHSCOPE_API_KEY = DASHSCOPE_API_KEY
 RPM_LIMIT = 500  # 每分钟最多调用次数（Requests Per Minute）- 测试用, 已提高限制
 WINDOW_SECONDS = 60  # 限流时间窗口（秒）, 与RPM_LIMIT配合实现每分钟限流
 
@@ -189,9 +192,9 @@ def call_dashscope_embedding(input_data: List[Dict]) -> Tuple[bool, List[float],
     try:
         # 调用达摩院多模态嵌入API
         response = dashscope.MultiModalEmbedding.call(
-            model=DASHSCOPE_MODEL,
-            input=input_data,
-            api_key=DASHSCOPE_API_KEY
+            model = DASHSCOPE_MODEL,
+            input = input_data,
+            api_key = DASHSCOPE_API_KEY
         )
     except Exception as e:
         logger.error(f"调用 DashScope 异常：{e}")
