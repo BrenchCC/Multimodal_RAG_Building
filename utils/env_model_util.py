@@ -1,6 +1,58 @@
 import os
 from dotenv import load_dotenv
 
+# 代理自动检测和处理函数
+def configure_proxy_for_local_services():
+    """
+    自动检测并配置代理设置，确保本地服务（如 Milvus、PaddleOCR）能够正常访问
+    当访问 localhost/127.0.0.1 时，应该禁用代理
+
+    Returns:
+        dict: 包含代理设置的字典，用于 Milvus 等客户端配置
+    """
+    import logging
+    logger = logging.getLogger("ProxyConfig")
+
+    # 检查是否设置了代理
+    has_http_proxy = 'http_proxy' in os.environ or 'HTTP_PROXY' in os.environ
+    has_https_proxy = 'https_proxy' in os.environ or 'HTTPS_PROXY' in os.environ
+
+    if has_http_proxy or has_https_proxy:
+        logger.debug("代理环境变量已设置，正在配置代理例外...")
+
+        # 对于本地服务，我们需要确保 no_proxy 包含本地地址
+        no_proxy = os.environ.get('no_proxy', '')
+        no_proxy_upper = os.environ.get('NO_PROXY', '')
+
+        # 合并代理例外列表
+        all_no_proxy = set()
+        if no_proxy:
+            all_no_proxy.update([addr.strip() for addr in no_proxy.split(',') if addr.strip()])
+        if no_proxy_upper:
+            all_no_proxy.update([addr.strip() for addr in no_proxy_upper.split(',') if addr.strip()])
+
+        # 确保本地地址在代理例外中
+        local_addresses = ['localhost', '127.0.0.1', '0.0.0.0']
+        for addr in local_addresses:
+            if addr not in all_no_proxy:
+                all_no_proxy.add(addr)
+                logger.debug(f"添加本地地址到代理例外: {addr}")
+
+        # 更新环境变量
+        updated_no_proxy = ','.join(all_no_proxy)
+        os.environ['no_proxy'] = updated_no_proxy
+        os.environ['NO_PROXY'] = updated_no_proxy
+        logger.debug(f"更新后的代理例外列表: {updated_no_proxy}")
+
+        return {
+            'http_proxy': None,
+            'https_proxy': None,
+            'no_proxy': updated_no_proxy
+        }
+    else:
+        logger.debug("未检测到代理环境变量")
+        return {}
+
 # 加载 .env 文件
 load_dotenv()
 

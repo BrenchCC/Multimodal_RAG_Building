@@ -48,8 +48,8 @@ def get_sorted_md_files(input_dir: str) -> List[str]:
     return sort_files
 
 def get_surrounding_text_content(
-    index,
     data_list: List[str],
+    index,
     max_prev_chunk = 3,
     max_next_chunk = 2,
     max_chars = 800
@@ -92,10 +92,10 @@ def get_surrounding_text_content(
         i -= 1
     
     j = index + 1
-    collected_texts = 0
+    collected_next = 0
     next_char_count = 0
 
-    while j < len(data_list) and collected_texts < max_next_chunk and next_char_count < max_chars:
+    while j < len(data_list) and collected_next < max_next_chunk and next_char_count < max_chars:
         # 检查是否为文本字典：image_path为空字符串或None
         if 'text' in data_list[j] and not data_list[j].get('image_path'):
             text = data_list[j].get('text', '').strip()
