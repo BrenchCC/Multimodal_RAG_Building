@@ -122,7 +122,7 @@ class LLMClient:
         model: str = "qwen-omni-turbo",
         api_key: str = None,
         base_url: str = None,
-        streaming: bool = True,
+        streaming: bool = False,
         **kwargs
     ) -> ChatOpenAI:
         """获取 Qwen 模型客户端"""
